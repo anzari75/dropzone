@@ -21,7 +21,10 @@ Route::get('/home', 'HomeController@index');
 Route::resource('states', 'StateController');
 Route::resource('areas', 'AreasController');
 Route::resource('categories', 'CategoryController');
-Route::resource('categories', 'SubCategoryController');
+Route::resource('subcategories', 'SubCategoryController');
 Route::resource('brands', 'BrandController');
 Route::resource('listingtypes', 'ListingtypeController');
+Route::get('products/areas/{state_id}', 'ProductsController@getStateAreas');
+Route::get('products/subcategories/{category_id}', 'ProductsController@getSubcategory');
 Route::resource('products', 'ProductsController');
+
