@@ -81,6 +81,11 @@
             </div>
         </nav>
 
+        <div class="container-fluid">
+
+            @include('flash::message')
+        </div>
+
         @yield('content')
     </div>
 

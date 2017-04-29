@@ -23,13 +23,31 @@ class ProductsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
 
-        $products = Product::all();
+        $products = Product::with('brand','subcategory','area','user');
 
-        return view ('products.index',compact('products'));
+        if(!empty($request->search_anything)){
+
+            $search_anything = $request->search_anything;
+
+            $products = $products->where(function ($query) use ($search_anything) {
+                $query->orWhere('product_name','like','%'.$search_anything.'%')
+                ->orWhere('product_discription','like','%'.$search_anything.'%');
+
+            });
+        }
+
+
+
+        $products = $products->paginate(5);
+        $brands = brands::pluck('brand_name','id');
+        $categories = Category::pluck('category_name','id');
+        $states = State::pluck('state_name','id');
+
+        return view ('products.index',compact('products','brands','categories','states'));
 
 
 
@@ -77,7 +95,20 @@ class ProductsController extends Controller
 
         //dapatkan current user id
         $product->user_id = auth()->id();
+
+        // if have file to upload 
+        if ($request->hasFile('product_image')) {
+
+            $path = $request->product_image->store('images');
+
+            //save product image name
+            $product->product_image = $request->product_image->hashName();
+    
+        }
         $product->save();
+
+
+        flash ('Your Product Submitted')->success();
 
         //selepas berjaya simpan kembali ke senarai product 
 
@@ -107,7 +138,21 @@ class ProductsController extends Controller
      */
     public function edit($id)
     {
-        //
+        // dapatkan maklumat product
+        $product = Product::find($id);
+        $states = State::pluck('state_name', 'id');
+        $areas = Area::pluck('area_name', 'id');
+        $brands = brands::pluck('brand_name', 'id');
+        $categories = Category::pluck('category_name', 'id');
+        $subcategories = Subcategory::pluck('subcategory_name', 'id');
+        // get area based on previous 
+        $areas= $this->getStateAreas($product->area->state_id);
+        $subcategories= $this->getSubcategory($product->subcategory->category_id);
+
+
+
+        //tolong paparkan create.blade.php
+        return view('products.edit', compact('brands' , 'areas' , 'subcategories', 'states', 'categories','product','areas'));
     }
 
     /**
@@ -119,7 +164,40 @@ class ProductsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $product = Product::findOrFail($id);
+
+
+
+        $product->product_name = $request->product_name;
+        $product->product_discription = $request->product_desc;
+        $product->product_price = $request->price;
+        $product->brand_id = $request->brand_id;
+        $product->area_id = $request->area_id;
+        $product->subcategory_id = $request->subcategory_id;
+        $product->condition = $request->condition;
+
+        //dapatkan current user id
+        
+
+        // if have file to upload 
+        if ($request->hasFile('product_image')) {
+
+            $path = $request->product_image->store('images');
+
+            //save
+           $product->product_image = $request->product_image->hashName();
+    
+        }
+        $product->save();
+
+
+        flash ('Your Product Updated')->success();
+
+        //selepas berjaya simpan kembali ke senarai product 
+
+        return redirect()->route('products.edit',$product->id);
+
+
     }
 
     /**

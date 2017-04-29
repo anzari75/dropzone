@@ -25,13 +25,15 @@ class CreateProductRequest extends FormRequest
     {
         return [
             'product_name'=>'required',
-            'product_desc'=>'required | numeric',
+            'product_desc'=>'required',
             'price'=>'required',
             'condition'=>'required | alpha',
             'area_id' =>'required',
             'subcategory_id'=>'required',
-            'brand_id'=>'required'
-
+            'brand_id'=>'required',
+            'state_id'=>'required',
+            'category_id'=>'required',
+            'product_image'=>'image|mimes:png,jpg'
         ];
     }
 }
