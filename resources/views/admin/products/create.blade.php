@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Edit Product</div>
+                <div class="panel-heading">New Product</div>
 
                 <div class="panel-body">
 
@@ -22,23 +22,23 @@
                 </div>
                 @endif
 
-                {!! Form::open(['route' =>['products.update',$product->id], 'method'=>'PUT', 'files'=> true ]) !!}
+                {!! Form::open(['route' => 'admin.products.store', 'files'=> true ]) !!}
 
                 <div class="form-group {{ $errors->has('product_name') ? 'has-error' : false }}">
                         {!! Form::label('product_name', 'Product Name', ['class' => 'control-label']); !!}
-                        {!! Form::text('product_name', $product->product_name, ['class'=>'form-control']); !!}
+                        {!! Form::text('product_name', '', ['class'=>'form-control']); !!}
                     </div>
                     
                     <div class="form-group {{ $errors->has('product_desc') ? 'has-error' : false }}">
                         {!! Form::label('product_desc', 'Description', ['class' => 'control-label']); !!}
-                        {!! Form::text('product_desc', $product->product_discription, ['class'=>'form-control']); !!}
+                        {!! Form::text('product_desc', '', ['class'=>'form-control']); !!}
                     </div>
 
                     
 
                     <div class="form-group {{ $errors->has('price') ? 'has-error' : false }}">
                         {!! Form::label('price', 'Price', ['class' => 'control-label']); !!}
-                        {!! Form::text('price', $product->product_price, ['class'=>'form-control']); !!}
+                        {!! Form::text('price', '', ['class'=>'form-control']); !!}
                         
                     </div>
 
@@ -50,27 +50,27 @@
 
                     <div class="form-group {{ $errors->has('state_id') ? 'has-error' : false }}">
                         {!! Form::label('state_id', 'State', ['class' => 'control-label']); !!}
-                        {!! Form::select('state_id', $states, $product->area->state_id, ['placeholder' => 'Pick an area ..', 'class' => 'form-control', 'id'=> 'state_id']); !!}
+                        {!! Form::select('state_id', $states, null, ['placeholder' => 'Pick an area ..', 'class' => 'form-control', 'id'=> 'state_id']); !!}
                     </div>
 
                     <div class="form-group {{ $errors->has('area_id') ? 'has-error' : false }}">
                         {!! Form::label('area_id', 'Area', ['class' => 'control-label']); !!}
-                        {!! Form::select('area_id', $areas, $product->area_id, ['placeholder' => 'Pick an area ..', 'class' => 'form-control', 'id'=> 'area_id']); !!}
+                        {!! Form::select('area_id', [], null, ['placeholder' => 'Pick an area ..', 'class' => 'form-control', 'id'=> 'area_id']); !!}
                     </div>
                     
                     <div class="form-group {{ $errors->has('brand_id') ? 'has-error' : false }}">
                         {!! Form::label('brand_id', 'Brand', ['class' => 'control-label']); !!}
-                        {!! Form::select('brand_id', $brands, $product->brand_id, ['placeholder' => 'Pick a brand','class'=>'form-control']); !!}
+                        {!! Form::select('brand_id', $brands, null, ['placeholder' => 'Pick a brand','class'=>'form-control']); !!}
                     </div>
 
                     <div class="form-group {{ $errors->has('category_id') ? 'has-error' : false }}">
                         {!! Form::label('category_id', 'Category', ['class' => 'control-label']); !!}
-                        {!! Form::select('category_id', $categories, $product->subcategory->category_id, ['placeholder' => 'Pick a Category','class'=>'form-control', 'id' => 'category_id']); !!}
+                        {!! Form::select('category_id', $categories, null, ['placeholder' => 'Pick a Category','class'=>'form-control', 'id' => 'category_id']); !!}
                     </div>
 
                     <div class="form-group {{ $errors->has('subcategory_id') ? 'has-error' : false }}">
                         {!! Form::label('subcategory_id', 'Subcategory', ['class' => 'control-label']); !!}
-                        {!! Form::select('subcategory_id',$subcategories, $product->subcategory->category_id, ['placeholder' => 'Pick a Subcategory','class'=>'form-control' , 'id' => 'subcategory_id']); !!}
+                        {!! Form::select('subcategory_id', [], null, ['placeholder' => 'Pick a Subcategory','class'=>'form-control' , 'id' => 'subcategory_id']); !!}
                     </div>
 
                     <!--
@@ -88,16 +88,11 @@
                     
                     </div>
 
-                     <div class="form-group">
+                   
 
-                    @if(!empty($product->product_image))
-                    <img src="{{ asset('storage/uploads/'.$product->product_image) }}" class="img-responsive">
-                    @endif
-                    </div>
-
-                    <div class="form-group pull-left">
+                    <div class="form-group pull-right">
                         <button type="submit" name="submit" class="btn btn-success">Submit</button>
-                        <button class="btn btn-danger"><a href="{{ route('products.index') }}" >Cancel</a></button>
+                        <button class="btn btn-danger"><a href="{{ route('admin.products.index') }}" >Cancel</a></button>
                     </div>                          
     
                 {!! Form::close() !!}
@@ -126,9 +121,15 @@
 
              };
 
+               $('#state_id').change(function(){
+
+              var state_id = $(this).val();
+              getStateAreas(state_id);
+              });
+
              function getStateAreas(state_id){
 
-                var ajax_url = '/products/areas/' + state_id;
+                var ajax_url = '/admin/products/areas/' + state_id;
                 $.get( ajax_url, function( data ) {
                     //console log nk check dy return gapo
                   //console.log(data);
@@ -166,11 +167,15 @@
                 getCategorySubCategory(selected_category_id);
              }
 
-             
+             $('#category_id').change(function(){
+
+              var category_id = $(this).val();
+              getCategorySubCategory(category_id);
+              });
 
              function getCategorySubCategory(category_id){
 
-                  var ajax_url = '/products/subcategories/' + category_id;
+                  var ajax_url = 'admin/products/subcategories/' + category_id;
                   $.get( ajax_url, function( data ) {
                     //console log nk check dy return gapo
                   //console.log(data);

@@ -22,7 +22,7 @@
                 </div>
                 @endif
 
-                {!! Form::open(['route' =>['products.update',$product->id], 'method'=>'PUT', 'files'=> true ]) !!}
+                {!! Form::open(['route' =>['admin.products.update',$product->id], 'method'=>'PUT', 'files'=> true ]) !!}
 
                 <div class="form-group {{ $errors->has('product_name') ? 'has-error' : false }}">
                         {!! Form::label('product_name', 'Product Name', ['class' => 'control-label']); !!}
@@ -97,7 +97,7 @@
 
                     <div class="form-group pull-left">
                         <button type="submit" name="submit" class="btn btn-success">Submit</button>
-                        <button class="btn btn-danger"><a href="{{ route('products.index') }}" >Cancel</a></button>
+                        <button class="btn btn-danger"><a href="{{ route('admin.products.index') }}" >Cancel</a></button>
                     </div>                          
     
                 {!! Form::close() !!}

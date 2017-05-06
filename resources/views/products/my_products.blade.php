@@ -88,7 +88,7 @@
 
         </div>
             <div class="panel panel-primary">
-                <div class="panel-heading">Manage Product</div>
+                <div class="panel-heading">Manage My Listed Products</div>
 
                
                 
@@ -96,7 +96,7 @@
                 <div class="panel-body">
 
                 @role('members')
-                 <a href="{{route ('products.create')}}" class="btn btn-success pull-right">Create Product 
+                 <a href="{{route ('products.create')}}" class="btn btn-success pull-right">Create Product
 
                  @endrole
 
@@ -115,7 +115,6 @@
                     <th> Brand </th>
                     <th> Seller </th>
                     <th> Action </th>
-                   
                     </tr>
                     </thead>
                     <tbody>
@@ -148,13 +147,18 @@
                                 <td>
                                     
 
-                          
-                                    <a href="{{ route('products.show', $product->id) }}" class="btn btn-info"> Show </a>
+                                    <form method="POST" action="{{ route('products.destroy', $product->id) }}">
 
-                                    
+                                        <input type="hidden" name="_method" value="DELETE">
+
+                                        {{ csrf_field() }}
+
+                                    <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning btn-mini">Edit</a>
+
+                                    <button type="button" class="btn btn-danger delete">Delete</button>
+
+                                    </form>
                                 </td>
-
-
 
 
                             </tr>

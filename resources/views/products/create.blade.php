@@ -92,7 +92,7 @@
 
                     <div class="form-group pull-right">
                         <button type="submit" name="submit" class="btn btn-success">Submit</button>
-                        <button class="btn btn-danger"><a href="{{ route('products.index') }}" >Cancel</a></button>
+                        <button class="btn btn-danger"><a href="{{ route('my_products') }}" >Cancel</a></button>
                     </div>                          
     
                 {!! Form::close() !!}
@@ -120,6 +120,12 @@
 
 
              };
+
+               $('#state_id').change(function(){
+
+              var state_id = $(this).val();
+              getStateAreas(state_id);
+              });
 
              function getStateAreas(state_id){
 
@@ -160,6 +166,12 @@
              if (selected_category_id.length>0){
                 getCategorySubCategory(selected_category_id);
              }
+
+             $('#category_id').change(function(){
+
+              var category_id = $(this).val();
+              getCategorySubCategory(category_id);
+              });
 
              function getCategorySubCategory(category_id){
 

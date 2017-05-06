@@ -4,12 +4,26 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
+
+
+
+
+
+
+
+                           
+                                  
+
+
+
+
+
         <div class="panel panel-primary">
             <div class="panel-heading">Search Product</div>
 
             <div class="panel-body">
 
-                <form action="{{ route('products.index') }}" method="GET">
+                <form action="{{ route('admin.products.index') }}" method="GET">
 
                     <div class="row">
 
@@ -94,11 +108,7 @@
                 
 
                 <div class="panel-body">
-
-                @role('members')
-                 <a href="{{route ('products.create')}}" class="btn btn-success pull-right">Create Product 
-
-                 @endrole
+                 <a href="{{route ('admin.products.create')}}" class="btn btn-success pull-right">Create Product
 
                 </a>
                     <table class="table table-bordered table-striped table-hover">
@@ -115,7 +125,6 @@
                     <th> Brand </th>
                     <th> Seller </th>
                     <th> Action </th>
-                   
                     </tr>
                     </thead>
                     <tbody>
@@ -139,22 +148,31 @@
                                 <td>{{ $product->product_discription }}</td>
                                 <td>{{ $product->product_price }}</td>
                                 <td>{{ $product->condition }}</td>
-                                <td>
-                                    {{ $product->area->area_name }}, {{ $product->area->state->state_name }}
+
+                                <td> 
+                                 {{ $product->area->area_name }} , {{ $product->area->state->state_name }}
+
+
                                 </td>
+
                                 <td>{{ $product->subcategory->subcategory_name or '' }}</td>
                                 <td>{{ $product->brand->brand_name }}</td>
                                 <td>{{ $product->user->name }}</td>
                                 <td>
                                     
 
-                          
-                                    <a href="{{ route('products.show', $product->id) }}" class="btn btn-info"> Show </a>
+                                    <form method="POST" action="{{ route('admin.products.destroy', $product->id) }}">
 
-                                    
+                                        <input type="hidden" name="_method" value="DELETE">
+
+                                        {{ csrf_field() }}
+
+                                    <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-warning btn-mini">Edit</a>
+
+                                    <button type="button" class="btn btn-danger delete">Delete</button>
+
+                                    </form>
                                 </td>
-
-
 
 
                             </tr>

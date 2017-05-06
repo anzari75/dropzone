@@ -12,6 +12,9 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/sweetalert.css') }}" rel="stylesheet">
+
+
 
     <!-- Scripts -->
     <script>
@@ -44,7 +47,14 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
                         <li>
-                            <a href="{{ route ('products.index')}}">Products</a>
+                            <a href="{{ route ('products.index')}}">Home</a></li>
+                            @role('members');
+                              <li><a href="{{ route ('my_products')}}">My Products</a></li>
+                            @endrole
+                            @role('admin')
+
+                            <li><a href="{{ route ('admin.products.index')}}">Manage Admin Products</a>
+                            @endrole
                         </li>
 
                     </ul>
@@ -82,8 +92,10 @@
         </nav>
 
         <div class="container-fluid">
-
+        <!--
             @include('flash::message')
+
+            -->
         </div>
 
         @yield('content')
@@ -91,6 +103,10 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/sweetalert.min.js') }}"></script>
+     @include('sweet::alert')
+
+
 </body>
 </html>
 
